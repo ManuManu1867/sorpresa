@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ramo de flores amarillas</title>
+
+<style>
+
+/* =========================================
+   CONFIGURACIÓN GENERAL
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background: #000000;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100svh;
+
+    background: #000000;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 15px 10px;
+
+    overflow-x: hidden;
+
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+
+/* =========================================
+   PANTALLA DE CONTRASEÑA
+========================================= */
+
+#pantalla-codigo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: #000000;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 20px;
+
+    z-index: 9999;
+
+    padding: 30px 20px;
+}
+
+#pantalla-codigo h1 {
+    color: #FFFFFF;
+
+    font-size: clamp(22px, 5vw, 42px);
+
+    font-weight: bold;
+
+    text-align: center;
+
+    letter-spacing: 0.05em;
+
+    margin-bottom: 6px;
+}
+
+#pantalla-codigo p {
+    color: #FFFFFF;
+
+    font-size: clamp(13px, 2.3vw, 18px);
+
+    text-align: center;
+
+    opacity: 0.85;
+}
+
+#pantalla-codigo input {
+    background: transparent;
+
+    border: none;
+    border-bottom: 2px solid #FFFFFF;
+
+    color: #FFFFFF;
+
+    font-family: inherit;
+
+    font-size: clamp(22px, 4.5vw, 36px);
+
+    text-align: center;
+
+    padding: 6px 12px;
+
+    width: min(100%, 280px);
+
+    outline: none;
+
+    letter-spacing: 0.15em;
+
+    caret-color: #FFD15A;
+}
+
+#pantalla-codigo input::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 0.15em;
+}
+
+#pantalla-codigo button {
+    background: #FFD15A;
+
+    color: #000000;
+
+    border: none;
+
+    font-family: inherit;
+
+    font-size: clamp(15px, 2.3vw, 20px);
+
+    font-weight: bold;
+
+    padding: 10px 34px;
+
+    border-radius: 40px;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease, background 0.2s ease;
+
+    letter-spacing: 0.05em;
+}
+
+#pantalla-codigo button:hover {
+    background: #FFE18A;
+    transform: scale(1.05);
+}
+
+#pantalla-codigo button:active {
+    transform: scale(0.98);
+}
+
+#mensaje-error {
+    color: #FF3B30;
+
+    font-size: clamp(13px, 1.8vw, 16px);
+
+    min-height: 22px;
+
+    text-align: center;
+
+    font-weight: bold;
+
+    letter-spacing: 0.05em;
+}
+
+
+/* =========================================
+   CONTENIDO PRINCIPAL
+========================================= */
+
+#contenido-principal {
+    display: none;
+
+    width: 100%;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#contenido-principal.visible {
+    display: flex;
+}
+
+
+/* =========================================
+   TEXTOS EN FORMA DE ARCO
+   Reducidos para móvil
+========================================= */
+
+.texto-arriba,
+.texto-abajo {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+
+    font-size: clamp(11px, 2.3vw, 26px);
+    font-weight: bold;
+    letter-spacing: 0.02em;
+
+    margin: 10px 0;
+
+    user-select: none;
+
+    white-space: nowrap;
+}
+
+.texto-arriba {
+    align-items: flex-end;
+}
+
+.texto-abajo {
+    align-items: flex-start;
+}
+
+.texto-arriba span,
+.texto-abajo span {
+    display: inline-block;
+
+    color: #FFFFFF;
+
+    opacity: 0;
+
+    animation:
+        aparecerLetra 0.4s
+        ease-out
+        forwards;
+}
+
+@keyframes aparecerLetra {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* =========================================
+   CONTENEDOR DEL RAMO
+   Reducido para que quepa en móvil
+========================================= */
+
+.ramo {
+    width: min(85%, 420px);
+    margin: 10px auto;
+}
+
+svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+
+/* =========================================
+   ANIMACIÓN DE LAS FLORES
+========================================= */
+
+.flor {
+    opacity: 0;
+
+    transform-box: fill-box;
+    transform-origin: center bottom;
+
+    animation:
+        aparecerFlor 2.2s
+        cubic-bezier(0.22, 1, 0.36, 1)
+        forwards;
+}
+
+@keyframes aparecerFlor {
+
+    0% {
+        opacity: 0;
+        transform: translateY(22px) scale(0.5);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateY(-4px) scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* =========================================
+   APARICIÓN DEL PAPEL
+========================================= */
+
+.papel {
+    opacity: 0;
+
+    animation:
+        aparecerPapel 1.4s
+        ease-out 0.2s
+        forwards;
+}
+
+@keyframes aparecerPapel {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+
+/* =========================================
+   APARICIÓN DEL LAZO
+========================================= */
+
+.lazo {
+    opacity: 0;
+
+    animation:
+        aparecerLazo 1.4s
+        ease-out 1.6s
+        forwards;
+}
+
+@keyframes aparecerLazo {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+
+/* =========================================
+   APARICIÓN DE TALLOS Y HOJAS
+========================================= */
+
+.tallos-arriba,
+.tallos-abajo,
+.hojas {
+    opacity: 0;
+
+    animation:
+        aparecerTallos 1.4s
+        ease-out 3.0s
+        forwards;
+}
+
+@keyframes aparecerTallos {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+
+/* =========================================
+   APARICIÓN ALTERNADA DE LAS FLORES
+========================================= */
+
+.f1  { animation-delay: 4.4s; }
+.f20 { animation-delay: 4.95s; }
+.f2  { animation-delay: 5.5s; }
+.f19 { animation-delay: 6.05s; }
+.f3  { animation-delay: 6.6s; }
+.f18 { animation-delay: 7.15s; }
+.f4  { animation-delay: 7.7s; }
+.f17 { animation-delay: 8.25s; }
+.f5  { animation-delay: 8.8s; }
+.f16 { animation-delay: 9.35s; }
+.f6  { animation-delay: 9.9s; }
+.f15 { animation-delay: 10.45s; }
+.f7  { animation-delay: 11.0s; }
+.f14 { animation-delay: 11.55s; }
+.f8  { animation-delay: 12.1s; }
+.f13 { animation-delay: 12.65s; }
+.f9  { animation-delay: 13.2s; }
+.f12 { animation-delay: 13.75s; }
+.f10 { animation-delay: 14.3s; }
+.f11 { animation-delay: 15.4s; }
+
+
+/* =========================================
+   AJUSTES ESPECÍFICOS PARA MÓVIL
+========================================= */
+
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px 6px;
+    }
+
+    .ramo {
+        width: 80%;
+        margin: 6px auto;
+    }
+
+    .texto-arriba,
+    .texto-abajo {
+        margin: 6px 0;
+        font-size: clamp(10px, 2.5vw, 14px);
+    }
+
+}
+
+
+/* =========================================
+   REDUCCIÓN DE MOVIMIENTO
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .flor,
+    .papel,
+    .lazo,
+    .tallos-arriba,
+    .tallos-abajo,
+    .hojas,
+    .texto-arriba span,
+    .texto-abajo span {
+
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        opacity: 1;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =================================================
+     PANTALLA DE CÓDIGO
+================================================= -->
+
+<div id="pantalla-codigo">
+
+    <h1>Introduce el código</h1>
+
+    <p>Pista: es una fecha especial (DD/MM)</p>
+
+    <input
+        type="text"
+        id="input-codigo"
+        placeholder="--/--"
+        maxlength="5"
+        autocomplete="off"
+        inputmode="numeric"
+    >
+
+    <button id="boton-validar">Comprobar</button>
+
+    <div id="mensaje-error"></div>
+
+</div>
+
+
+
+<!-- =================================================
+     CONTENIDO PRINCIPAL
+================================================= -->
+
+<div id="contenido-principal">
+
+
+    <!-- TEXTO DE ARRIBA -->
+    <div class="texto-arriba" aria-label="Feliz Día de las Flores Amarillas">
+
+        <span style="animation-delay: 18.00s; transform: translateY(0px);">¡</span>
+        <span style="animation-delay: 18.08s; transform: translateY(-6px);">F</span>
+        <span style="animation-delay: 18.16s; transform: translateY(-12px);">e</span>
+        <span style="animation-delay: 18.24s; transform: translateY(-18px);">l</span>
+        <span style="animation-delay: 18.32s; transform: translateY(-24px);">i</span>
+        <span style="animation-delay: 18.40s; transform: translateY(-30px);">z</span>
+        <span style="animation-delay: 18.48s; transform: translateY(-34px);">&nbsp;</span>
+        <span style="animation-delay: 18.56s; transform: translateY(-38px);">D</span>
+        <span style="animation-delay: 18.64s; transform: translateY(-40px);">í</span>
+        <span style="animation-delay: 18.72s; transform: translateY(-38px);">a</span>
+        <span style="animation-delay: 18.80s; transform: translateY(-34px);">&nbsp;</span>
+        <span style="animation-delay: 18.88s; transform: translateY(-30px);">d</span>
+        <span style="animation-delay: 18.96s; transform: translateY(-24px);">e</span>
+        <span style="animation-delay: 19.04s; transform: translateY(-18px);">&nbsp;</span>
+        <span style="animation-delay: 19.12s; transform: translateY(-12px);">l</span>
+        <span style="animation-delay: 19.20s; transform: translateY(-6px);">a</span>
+        <span style="animation-delay: 19.28s; transform: translateY(0px);">s</span>
+        <span style="animation-delay: 19.36s; transform: translateY(-6px);">&nbsp;</span>
+        <span style="animation-delay: 19.44s; transform: translateY(-12px);">F</span>
+        <span style="animation-delay: 19.52s; transform: translateY(-18px);">l</span>
+        <span style="animation-delay: 19.60s; transform: translateY(-24px);">o</span>
+        <span style="animation-delay: 19.68s; transform: translateY(-30px);">r</span>
+        <span style="animation-delay: 19.76s; transform: translateY(-34px);">e</span>
+        <span style="animation-delay: 19.84s; transform: translateY(-38px);">s</span>
+        <span style="animation-delay: 19.92s; transform: translateY(-40px);">&nbsp;</span>
+        <span style="animation-delay: 20.00s; transform: translateY(-38px);">A</span>
+        <span style="animation-delay: 20.08s; transform: translateY(-34px);">m</span>
+        <span style="animation-delay: 20.16s; transform: translateY(-30px);">a</span>
+        <span style="animation-delay: 20.24s; transform: translateY(-24px);">r</span>
+        <span style="animation-delay: 20.32s; transform: translateY(-18px);">i</span>
+        <span style="animation-delay: 20.40s; transform: translateY(-12px);">l</span>
+        <span style="animation-delay: 20.48s; transform: translateY(-6px);">l</span>
+        <span style="animation-delay: 20.56s; transform: translateY(0px);">a</span>
+        <span style="animation-delay: 20.64s; transform: translateY(-4px);">s</span>
+        <span style="animation-delay: 20.72s; transform: translateY(0px);">!</span>
+
+    </div>
+
+
+
+    <!-- RAMO -->
+    <div class="ramo">
+
+    <svg viewBox="0 0 1080 1350"
+         xmlns="http://www.w3.org/2000/svg">
+
+
+    <defs>
+
+    <!-- FLOR DE 5 PÉTALOS -->
+    <g id="flor5">
+        <ellipse cx="0" cy="-62" rx="38" ry="68" fill="#FFD15A"/>
+        <ellipse cx="59" cy="-19" rx="38" ry="68" transform="rotate(55 59 -19)" fill="#FFE18A"/>
+        <ellipse cx="36" cy="54" rx="38" ry="68" transform="rotate(125 36 54)" fill="#FFD15A"/>
+        <ellipse cx="-36" cy="54" rx="38" ry="68" transform="rotate(-125 -36 54)" fill="#FFE18A"/>
+        <ellipse cx="-59" cy="-19" rx="38" ry="68" transform="rotate(-55 -59 -19)" fill="#FFCA4B"/>
+        <circle cx="0" cy="0" r="28" fill="#F5B735"/>
+        <circle cx="0" cy="0" r="16" fill="#FFE18A"/>
+    </g>
+
+
+    <!-- FLOR DE 6 PÉTALOS -->
+    <g id="flor6">
+        <ellipse cx="0" cy="-68" rx="34" ry="70" fill="#FFD968"/>
+        <ellipse cx="59" cy="-34" rx="34" ry="70" transform="rotate(60 59 -34)" fill="#FFE69A"/>
+        <ellipse cx="59" cy="34" rx="34" ry="70" transform="rotate(120 59 34)" fill="#FFD15A"/>
+        <ellipse cx="0" cy="68" rx="34" ry="70" fill="#FFE18A"/>
+        <ellipse cx="-59" cy="34" rx="34" ry="70" transform="rotate(60 -59 34)" fill="#FFD15A"/>
+        <ellipse cx="-59" cy="-34" rx="34" ry="70" transform="rotate(120 -59 -34)" fill="#FFCA4B"/>
+        <circle cx="0" cy="0" r="26" fill="#F2B432"/>
+        <circle cx="0" cy="0" r="14" fill="#FFE69A"/>
+    </g>
+
+
+    <!-- FLOR DE 7 PÉTALOS -->
+    <g id="flor7">
+        <ellipse cx="0" cy="-60" rx="32" ry="64" fill="#FFD15A"/>
+        <ellipse cx="47" cy="-30" rx="32" ry="64" transform="rotate(51 47 -30)" fill="#FFE18A"/>
+        <ellipse cx="54" cy="27" rx="32" ry="64" transform="rotate(103 54 27)" fill="#FFE69A"/>
+        <ellipse cx="20" cy="60" rx="32" ry="64" transform="rotate(154 20 60)" fill="#FFCA4B"/>
+        <ellipse cx="-20" cy="60" rx="32" ry="64" transform="rotate(206 -20 60)" fill="#FFD15A"/>
+        <ellipse cx="-54" cy="27" rx="32" ry="64" transform="rotate(257 -54 27)" fill="#FFE18A"/>
+        <ellipse cx="-47" cy="-30" rx="32" ry="64" transform="rotate(309 -47 -30)" fill="#FFD968"/>
+        <circle cx="0" cy="0" r="26" fill="#F2B432"/>
+        <circle cx="0" cy="0" r="14" fill="#FFE69A"/>
+    </g>
+
+
+    <!-- FLOR DE 8 PÉTALOS -->
+    <g id="flor8">
+        <ellipse cx="0" cy="-58" rx="30" ry="62" fill="#FFE18A"/>
+        <ellipse cx="41" cy="-41" rx="30" ry="62" transform="rotate(45 41 -41)" fill="#FFD15A"/>
+        <ellipse cx="58" cy="0" rx="30" ry="62" transform="rotate(90 58 0)" fill="#FFE69A"/>
+        <ellipse cx="41" cy="41" rx="30" ry="62" transform="rotate(135 41 41)" fill="#FFD15A"/>
+        <ellipse cx="0" cy="58" rx="30" ry="62" transform="rotate(180 0 58)" fill="#FFCA4B"/>
+        <ellipse cx="-41" cy="41" rx="30" ry="62" transform="rotate(225 -41 41)" fill="#FFE18A"/>
+        <ellipse cx="-58" cy="0" rx="30" ry="62" transform="rotate(270 -58 0)" fill="#FFD15A"/>
+        <ellipse cx="-41" cy="-41" rx="30" ry="62" transform="rotate(315 -41 -41)" fill="#FFE69A"/>
+        <circle cx="0" cy="0" r="24" fill="#F5B735"/>
+        <circle cx="0" cy="0" r="13" fill="#FFE18A"/>
+    </g>
+
+
+    <!-- TULIPÁN -->
+    <g id="tulipan">
+        <path d="M-52 -108 C-57 -60 -55 -12 -32 20 C-16 44 10 42 28 16 C51 -18 55 -66 50 -108 C27 -86 15 -62 0 -90 C-15 -63 -30 -84 -52 -108 Z" fill="#FFD052"/>
+        <path d="M-52 -108 C-40 -64 -20 -33 0 -18 C-8 -48 0 -70 0 -90 C-15 -63 -30 -84 -52 -108 Z" fill="#FFE79B"/>
+        <path d="M-20 -85 C-12 -55 -5 -30 0 -18 C5 -30 12 -55 20 -85 C10 -70 5 -62 0 -78 C-5 -62 -10 -70 -20 -85 Z" fill="#FFF0BE"/>
+    </g>
+
+
+    <!-- TULIPÁN CLARO -->
+    <g id="tulipanClaro">
+        <path d="M-48 -104 C-53 -58 -51 -12 -30 18 C-14 40 9 38 26 14 C47 -16 51 -62 46 -104 C25 -82 14 -60 0 -86 C-14 -61 -28 -80 -48 -104 Z" fill="#FFE18A"/>
+        <path d="M-48 -104 C-36 -62 -18 -32 0 -17 C-7 -45 0 -66 0 -86 C-14 -61 -28 -80 -48 -104 Z" fill="#FFF0BE"/>
+        <path d="M-18 -82 C-11 -53 -4 -28 0 -17 C4 -28 11 -53 18 -82 C9 -68 4 -60 0 -75 C-4 -60 -9 -68 -18 -82 Z" fill="#FFFAE8"/>
+    </g>
+
+
+    <!-- ROSA DE LADO -->
+    <g id="rosaDeLado">
+        <path d="M0 60 C-45 55 -75 20 -72 -20 C-70 -55 -40 -85 0 -95 C40 -85 70 -55 72 -20 C75 20 45 55 0 60 Z" fill="#FFC744"/>
+        <path d="M0 60 C-45 55 -75 20 -72 -20 C-70 -55 -40 -85 0 -95 C-25 -85 -35 -50 -32 -15 C-30 15 -15 45 0 60 Z" fill="#FFD15A"/>
+        <path d="M-8 55 C-38 45 -55 15 -52 -15 C-50 -42 -30 -62 0 -70 C-18 -55 -22 -30 -18 -5 C-14 25 -4 45 -8 55 Z" fill="#FFD968"/>
+        <path d="M8 55 C38 45 55 15 52 -15 C50 -42 30 -62 0 -70 C18 -55 22 -30 18 -5 C14 25 4 45 8 55 Z" fill="#FFE18A"/>
+        <path d="M-25 -50 C-30 -75 -15 -92 0 -95 C15 -92 30 -75 25 -50 C15 -62 5 -68 0 -60 C-5 -68 -15 -62 -25 -50 Z" fill="#FFE69A"/>
+        <path d="M-12 -55 C-22 -70 -8 -82 4 -74 C14 -68 12 -52 0 -50 C-8 -48 -14 -52 -12 -55 Z" fill="#F5B735"/>
+        <path d="M-8 -70 C-12 -82 -2 -88 4 -82 C-2 -78 -6 -74 -8 -70 Z" fill="#FFF0BF" opacity="0.75"/>
+        <path d="M-12 55 C-6 62 6 62 12 55 C6 60 -6 60 -12 55 Z" fill="#E8A83A" opacity="0.6"/>
+    </g>
+
+
+    <!-- HOJA VERDE GRANDE -->
+    <g id="hoja">
+        <path d="M0 0 C-55 -50 -95 -100 -85 -132 C-42 -132 -2 -78 0 0 Z" fill="#3FB82A"/>
+        <path d="M0 0 C-30 -40 -55 -78 -60 -110 C-25 -95 -5 -55 0 0 Z" fill="#269B20"/>
+    </g>
+
+
+    <!-- HOJA MEDIANA -->
+    <g id="hojaMediana">
+        <path d="M0 0 C-42 -40 -72 -78 -65 -105 C-32 -105 -2 -62 0 0 Z" fill="#38A923"/>
+        <path d="M0 0 C-22 -32 -42 -62 -48 -85 C-20 -75 -4 -45 0 0 Z" fill="#2A9E22"/>
+    </g>
+
+
+    <!-- HOJA PEQUEÑA -->
+    <g id="hojaPequena">
+        <path d="M0 0 C-38 -35 -65 -70 -58 -92 C-29 -92 -2 -54 0 0 Z" fill="#38A923"/>
+    </g>
+
+    </defs>
+
+
+
+    <!-- TALLOS SUPERIORES -->
+    <g class="tallos-arriba" fill="none" stroke="#40D900" stroke-width="12" stroke-linecap="butt">
+        <path d="M255 560 L255 145" transform="rotate(-42.00 255 560)"/>
+        <path d="M285 560 L285 380" transform="rotate(-37.58 285 560)"/>
+        <path d="M315 560 L315 250" transform="rotate(-33.16 315 560)"/>
+        <path d="M345 560 L345 440" transform="rotate(-28.74 345 560)"/>
+        <path d="M375 560 L375 130" transform="rotate(-24.32 375 560)"/>
+        <path d="M405 560 L405 380" transform="rotate(-19.89 405 560)"/>
+        <path d="M435 560 L435 250" transform="rotate(-15.47 435 560)"/>
+        <path d="M465 560 L465 440" transform="rotate(-11.05 465 560)"/>
+        <path d="M495 560 L495 130" transform="rotate(-6.63 495 560)"/>
+        <path d="M525 560 L525 380" transform="rotate(-2.21 525 560)"/>
+        <path d="M555 560 L555 250" transform="rotate(2.21 555 560)"/>
+        <path d="M585 560 L585 440" transform="rotate(6.63 585 560)"/>
+        <path d="M615 560 L615 130" transform="rotate(11.05 615 560)"/>
+        <path d="M645 560 L645 380" transform="rotate(15.47 645 560)"/>
+        <path d="M675 560 L675 250" transform="rotate(19.89 675 560)"/>
+        <path d="M705 560 L705 440" transform="rotate(24.32 705 560)"/>
+        <path d="M735 560 L735 130" transform="rotate(28.74 735 560)"/>
+        <path d="M765 560 L765 380" transform="rotate(33.16 765 560)"/>
+        <path d="M795 560 L795 250" transform="rotate(37.58 795 560)"/>
+        <path d="M825 560 L825 130" transform="rotate(42.00 825 560)"/>
+    </g>
+
+
+
+    <!-- HOJAS SUPERIORES -->
+    <g class="hojas">
+        <use href="#hoja" transform="translate(170 500) rotate(-25) scale(0.9)"/>
+        <use href="#hojaMediana" transform="translate(260 490) rotate(28) scale(0.85)"/>
+        <use href="#hoja" transform="translate(340 505) rotate(-32) scale(0.95)"/>
+        <use href="#hojaPequena" transform="translate(420 485) rotate(22) scale(0.9)"/>
+        <use href="#hojaMediana" transform="translate(500 500) rotate(-28) scale(0.85)"/>
+        <use href="#hojaPequena" transform="translate(580 490) rotate(26) scale(0.9)"/>
+        <use href="#hoja" transform="translate(660 505) rotate(-24) scale(0.9)"/>
+        <use href="#hojaMediana" transform="translate(740 485) rotate(30) scale(0.85)"/>
+        <use href="#hoja" transform="translate(820 500) rotate(-26) scale(0.9)"/>
+        <use href="#hojaPequena" transform="translate(900 490) rotate(24) scale(0.85)"/>
+        <use href="#hojaMediana" transform="translate(970 505) rotate(-22) scale(0.9)"/>
+    </g>
+
+
+
+    <!-- CAPA 1: FLORES DE TALLOS LARGOS (fondo) -->
+    <g transform="translate(-33 241) rotate(-42.00)"><g class="flor f1"><use href="#tulipan" transform="scale(1.00)"/></g></g>
+    <g transform="translate(198 168) rotate(-24.32)"><g class="flor f5"><use href="#flor6" transform="scale(0.90)"/></g></g>
+    <g transform="translate(446 133) rotate(-6.63)"><g class="flor f9"><use href="#tulipan" transform="scale(0.95)"/></g></g>
+    <g transform="translate(698 138) rotate(11.05)"><g class="flor f13"><use href="#tulipanClaro" transform="scale(1.05)"/></g></g>
+    <g transform="translate(942 183) rotate(28.74)"><g class="flor f17"><use href="#flor8" transform="scale(0.92)"/></g></g>
+
+
+    <!-- CAPA 2: FLORES DE TALLOS MEDIANOS -->
+    <g transform="translate(145 300) rotate(-33.16)"><g class="flor f3"><use href="#flor5" transform="scale(0.95)"/></g></g>
+    <g transform="translate(352 261) rotate(-15.47)"><g class="flor f7"><use href="#tulipanClaro" transform="scale(1.00)"/></g></g>
+    <g transform="translate(567 250) rotate(2.21)"><g class="flor f11"><use href="#flor7" transform="scale(1.00)"/></g></g>
+    <g transform="translate(780 269) rotate(19.89)"><g class="flor f15"><use href="#flor7" transform="scale(0.90)"/></g></g>
+    <g transform="translate(984 314) rotate(37.58)"><g class="flor f19"><use href="#flor5" transform="scale(0.95)"/></g></g>
+
+
+    <!-- CAPA 3: FLORES DE TALLOS CORTOS -->
+    <g transform="translate(175 417) rotate(-37.58)"><g class="flor f2"><use href="#rosaDeLado" transform="scale(0.90)"/></g></g>
+    <g transform="translate(344 391) rotate(-19.89)"><g class="flor f6"><use href="#flor6" transform="scale(1.00)"/></g></g>
+    <g transform="translate(518 380) rotate(-2.21)"><g class="flor f10"><use href="#rosaDeLado" transform="scale(1.05)"/></g></g>
+    <g transform="translate(693 386) rotate(15.47)"><g class="flor f14"><use href="#flor6" transform="scale(1.00)"/></g></g>
+    <g transform="translate(863 409) rotate(33.16)"><g class="flor f18"><use href="#tulipan" transform="scale(1.00)"/></g></g>
+
+
+    <!-- CAPA 4: FLORES DE TALLOS MUY CORTOS (PRIMER PLANO) -->
+    <g transform="translate(287 455) rotate(-28.74)"><g class="flor f4"><use href="#tulipan" transform="scale(1.05)"/></g></g>
+    <g transform="translate(442 442) rotate(-11.05)"><g class="flor f8"><use href="#flor8" transform="scale(0.88)"/></g></g>
+    <g transform="translate(599 441) rotate(6.63)"><g class="flor f12"><use href="#flor5" transform="scale(0.90)"/></g></g>
+    <g transform="translate(754 451) rotate(24.32)"><g class="flor f16"><use href="#rosaDeLado" transform="scale(0.95)"/></g></g>
+    <g transform="translate(1113 241) rotate(42.00)"><g class="flor f20"><use href="#flor7" transform="scale(0.90)"/></g></g>
+
+
+
+    <!-- TALLOS INFERIORES -->
+    <g class="tallos-abajo" fill="none" stroke="#43D900" stroke-width="14" stroke-linecap="butt">
+        <path d="M430 1180 L397 1247"/>
+        <path d="M461 1180 L437 1251"/>
+        <path d="M492 1180 L477 1254"/>
+        <path d="M523 1180 L518 1255"/>
+        <path d="M554 1180 L559 1255"/>
+        <path d="M585 1180 L600 1254"/>
+        <path d="M616 1180 L640 1251"/>
+        <path d="M647 1180 L680 1247"/>
+    </g>
+
+
+
+    <!-- PAPEL SUPERIOR -->
+    <g class="papel">
+        <path d="M125 495 L955 495 L540 930 Z" fill="#CDA88F"/>
+    </g>
+
+
+
+    <!-- PAPEL INFERIOR -->
+    <g class="papel">
+        <path d="M540 920 L395 1215 L685 1215 Z" fill="#CDA88F"/>
+    </g>
+
+
+
+    <!-- LAZO -->
+    <g class="lazo">
+        <path d="M530 940 C470 880 380 890 360 935 C340 980 410 1030 520 975 Z" fill="#FFD15A"/>
+        <path d="M515 940 C475 905 420 910 408 938 C398 965 445 990 510 965 Z" fill="#FFE69A"/>
+        <path d="M550 940 C610 880 700 890 720 935 C740 980 670 1030 560 975 Z" fill="#FFD15A"/>
+        <path d="M565 940 C605 905 660 910 672 938 C682 965 635 990 570 965 Z" fill="#FFE69A"/>
+        <circle cx="540" cy="955" r="35" fill="#F4BA35"/>
+        <circle cx="540" cy="955" r="24" fill="#FFD968"/>
+        <path d="M515 980 L465 1130 L520 1070 L540 975 Z" fill="#FFD052"/>
+        <path d="M565 980 L615 1130 L560 1070 L540 975 Z" fill="#FFD568"/>
+        <path d="M520 990 L485 1100 L510 1065 L530 985 Z" fill="#FFE69A"/>
+        <path d="M560 990 L595 1100 L570 1065 L550 985 Z" fill="#FFE69A"/>
+    </g>
+
+
+
+    </svg>
+
+    </div>
+
+
+
+    <!-- TEXTO DE ABAJO -->
+    <div class="texto-abajo" aria-label="Para Nora con cariño de Manu">
+
+        <span style="animation-delay: 21.72s; transform: translateY(0px);">P</span>
+        <span style="animation-delay: 21.80s; transform: translateY(6px);">a</span>
+        <span style="animation-delay: 21.88s; transform: translateY(12px);">r</span>
+        <span style="animation-delay: 21.96s; transform: translateY(18px);">a</span>
+        <span style="animation-delay: 22.04s; transform: translateY(24px);">&nbsp;</span>
+        <span style="animation-delay: 22.12s; transform: translateY(30px);">N</span>
+        <span style="animation-delay: 22.20s; transform: translateY(34px);">o</span>
+        <span style="animation-delay: 22.28s; transform: translateY(38px);">r</span>
+        <span style="animation-delay: 22.36s; transform: translateY(40px);">a</span>
+        <span style="animation-delay: 22.44s; transform: translateY(38px);">&nbsp;</span>
+        <span style="animation-delay: 22.52s; transform: translateY(34px);">c</span>
+        <span style="animation-delay: 22.60s; transform: translateY(30px);">o</span>
+        <span style="animation-delay: 22.68s; transform: translateY(24px);">n</span>
+        <span style="animation-delay: 22.76s; transform: translateY(18px);">&nbsp;</span>
+        <span style="animation-delay: 22.84s; transform: translateY(12px);">c</span>
+        <span style="animation-delay: 22.92s; transform: translateY(6px);">a</span>
+        <span style="animation-delay: 23.00s; transform: translateY(0px);">r</span>
+        <span style="animation-delay: 23.08s; transform: translateY(6px);">i</span>
+        <span style="animation-delay: 23.16s; transform: translateY(12px);">ñ</span>
+        <span style="animation-delay: 23.24s; transform: translateY(18px);">o</span>
+        <span style="animation-delay: 23.32s; transform: translateY(24px);">&nbsp;</span>
+        <span style="animation-delay: 23.40s; transform: translateY(30px);">d</span>
+        <span style="animation-delay: 23.48s; transform: translateY(34px);">e</span>
+        <span style="animation-delay: 23.56s; transform: translateY(38px);">&nbsp;</span>
+        <span style="animation-delay: 23.64s; transform: translateY(40px);">M</span>
+        <span style="animation-delay: 23.72s; transform: translateY(38px);">a</span>
+        <span style="animation-delay: 23.80s; transform: translateY(34px);">n</span>
+        <span style="animation-delay: 23.88s; transform: translateY(30px);">u</span>
+
+    </div>
+
+</div>
+
+
+
+<!-- =================================================
+     SCRIPT: VALIDACIÓN DEL CÓDIGO
+================================================= -->
+
+<script>
+
+(function () {
+
+    var CODIGO_CORRECTO = "21/09";
+
+    var pantallaCodigo = document.getElementById("pantalla-codigo");
+    var contenido      = document.getElementById("contenido-principal");
+    var input          = document.getElementById("input-codigo");
+    var boton          = document.getElementById("boton-validar");
+    var mensajeError   = document.getElementById("mensaje-error");
+
+    function validar() {
+
+        var valor = input.value.trim();
+
+        if (valor === CODIGO_CORRECTO) {
+
+            pantallaCodigo.style.display = "none";
+            contenido.classList.add("visible");
+
+        } else {
+
+            mensajeError.textContent = "Código incorrecto. Inténtalo otra vez.";
+
+            input.value = "";
+            input.focus();
+
+        }
+
+    }
+
+    boton.addEventListener("click", validar);
+
+    input.addEventListener("keydown", function (evento) {
+
+        if (evento.key === "Enter") {
+            validar();
+        }
+
+    });
+
+    input.addEventListener("input", function () {
+
+        var v = input.value.replace(/[^0-9]/g, "");
+
+        if (v.length > 4) {
+            v = v.substring(0, 4);
+        }
+
+        if (v.length >= 3) {
+            input.value = v.substring(0, 2) + "/" + v.substring(2);
+        } else if (v.length === 2) {
+            input.value = v + "/";
+        } else {
+            input.value = v;
+        }
+
+    });
+
+    input.focus();
+
+})();
+
+</script>
+
+
+
+</body>
+
+</html>
